@@ -62,10 +62,8 @@ class _ProdutosPageState extends State<ProdutosPage> {
       double precoProduto = _precos[titulo] ?? 0.0;
       int quantidadeProduto = _quantidade[titulo] ?? 0;
 
-      // Subtrai o valor total do produto do total geral
       _total -= (precoProduto * quantidadeProduto);
 
-      // Remove o produto do pedido
       _quantidade.remove(titulo);
       _imagens.remove(titulo);
       _precos.remove(titulo);
@@ -120,12 +118,23 @@ class _ProdutosPageState extends State<ProdutosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PRODUTOS'),
+        title: const Text('PRODUTOS', style: TextStyle(fontSize: 24)),
         backgroundColor: Colors.yellow,
-        centerTitle: true, // Centraliza o título
+        centerTitle: true,
       ),
       body: Column(
         children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(
+                'imagens/logo_site.png',
+                width: 150,
+                height: 150,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
           produtoItem(
             'Queijo Colonial',
             'O Queijo Colonial é um queijo típico da região rural, conhecido por seu sabor intenso e textura cremosa. Ideal para acompanhar pães, frutas e vinhos. Peso: 300g',
@@ -145,7 +154,7 @@ class _ProdutosPageState extends State<ProdutosPage> {
             60.00,
           ),
           const Spacer(),
-          // Botão para mostrar o pedido
+          //botão do pedido
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.blue,
