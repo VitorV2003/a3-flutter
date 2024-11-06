@@ -26,6 +26,7 @@ class ProdutosColoniaisApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
+          centerTitle: true,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -135,7 +136,7 @@ class _ProdutosPageState extends State<ProdutosPage>
                       onPressed: () {
                         _removerProduto(key);
                         Navigator.of(context).pop();
-                        _mostrarPedido();
+                        _mostrarPedido(); // Reabre o diálogo
                       },
                     ),
                   );
@@ -160,7 +161,13 @@ class _ProdutosPageState extends State<ProdutosPage>
             ),
             ElevatedButton(
               onPressed: _finalizarPedido,
-              child: const Text('Finalizar Pedido'),
+              child: const Text(
+                'Finalizar Pedido',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white, // Cor do texto para branco
+                ),
+              ),
             ),
           ],
         );
@@ -176,7 +183,7 @@ class _ProdutosPageState extends State<ProdutosPage>
           title: const Text('Pedido Realizado com Sucesso'),
           content: const Text(
             'Seu pedido foi realizado com sucesso!\n'
-            'Os dados da entrega chegaram no seu zap.',
+            'Os dados da entrega chegarão no seu zap.',
           ),
           actions: [
             TextButton(
@@ -219,6 +226,8 @@ class _ProdutosPageState extends State<ProdutosPage>
                   setState(() {
                     _selectedPaymentMethod = value!;
                   });
+                  Navigator.of(context).pop(); // Fecha o diálogo atual
+                  _mostrarPedido(); // Abre novamente para atualizar
                 },
               ),
             ),
@@ -232,6 +241,8 @@ class _ProdutosPageState extends State<ProdutosPage>
                   setState(() {
                     _selectedPaymentMethod = value!;
                   });
+                  Navigator.of(context).pop(); // Fecha o diálogo atual
+                  _mostrarPedido(); // Abre novamente para atualizar
                 },
               ),
             ),
@@ -245,6 +256,8 @@ class _ProdutosPageState extends State<ProdutosPage>
                   setState(() {
                     _selectedPaymentMethod = value!;
                   });
+                  Navigator.of(context).pop(); // Fecha o diálogo atual
+                  _mostrarPedido(); // Abre novamente para atualizar
                 },
               ),
             ),
@@ -285,7 +298,7 @@ class _ProdutosPageState extends State<ProdutosPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Image.asset('imagens/logo.png', width: 50, height: 50),
+        leading: Image.asset('imagens/logo_site.png', width: 50, height: 50),
         title: const Text('Produtos Coloniais'),
         actions: [
           IconButton(
@@ -301,6 +314,7 @@ class _ProdutosPageState extends State<ProdutosPage>
             labelColor: Theme.of(context).primaryColor,
             unselectedLabelColor: Colors.grey,
             indicatorColor: Theme.of(context).primaryColor,
+            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
             tabs: const [
               Tab(text: 'Carnes'),
               Tab(text: 'Queijos'),
@@ -337,14 +351,32 @@ class _ProdutosPageState extends State<ProdutosPage>
       children: [
         produtoItem(
           'Costela Bovina',
-          'Costela macia, ideal para churrasco. Peso: 1kg',
-          'imagens/costela.png',
+          'Costela macia, ideal para churrasco.',
+          'imagens/costela_bovina.jpg',
           75.00,
         ),
         produtoItem(
           'Picanha Premium',
-          'Picanha suculenta, perfeita para grelhar. Peso: 1kg',
-          'imagens/picanha.png',
+          'Picanha suculenta, perfeita para grelhar.',
+          'imagens/picanha_premium.jpg',
+          120.00,
+        ),
+        produtoItem(
+          'Filé Mignon Bovino',
+          'Corte nobre, macio e suculento. Ideal para grelhar e preparar pratos especiais.',
+          'imagens/file_mignon.jpg',
+          85.00,
+        ),
+        produtoItem(
+          'Alcatra',
+          'Corte versátil e macio, ótimo para grelhar ou preparar no forno.',
+          'imagens/alcatra.jpg',
+          120.00,
+        ),
+        produtoItem(
+          'Carne Moída',
+          'Moída de primeira, ideal para hambúrgueres e pratos do dia a dia.',
+          'imagens/carne_moida.jpg',
           120.00,
         ),
       ],
@@ -360,6 +392,30 @@ class _ProdutosPageState extends State<ProdutosPage>
           'imagens/queijo_colonial.png',
           40.00,
         ),
+        produtoItem(
+          'Queijo Coalho',
+          'Perfeito para assar na brasa ou grelhar. Sabor levemente salgado. Peso: 400g',
+          'imagens/coalho.jpg',
+          30.00,
+        ),
+        produtoItem(
+          'Queijo Parmesão',
+          'Queijo duro e envelhecido, ótimo para ralar e acompanhar massas. Peso: 500g',
+          'imagens/queijoparmesao.jpg',
+          55.00,
+        ),
+        produtoItem(
+          'Queijo Gorgonzola',
+          'Queijo azul de sabor intenso e textura cremosa. Ideal para molhos. Peso: 300g',
+          'imagens/queijogorgongon.jpg',
+          45.00,
+        ),
+        produtoItem(
+          'Queijo Minas Frescal',
+          'Queijo leve e fresco, ótimo para o café da manhã. Peso: 400g',
+          'imagens/minas.jpg',
+          25.00,
+        ),
       ],
     );
   }
@@ -372,6 +428,30 @@ class _ProdutosPageState extends State<ProdutosPage>
           'Linguiça feita com carne suína e temperos especiais. Peso: 500g',
           'imagens/linguica_colonial.png',
           30.00,
+        ),
+        produtoItem(
+          'Linguiça Apimentada',
+          'Para quem gosta de um toque picante, feita com pimenta natural. Peso: 500g',
+          'imagens/linguica_apimentada.jpg',
+          35.00,
+        ),
+        produtoItem(
+          'Linguiça Pernil',
+          'Linguiça artesanal feita com carne suína e temperos especiais. Peso: 500g',
+          'imagens/linguica_pernil.jpg',
+          32.00,
+        ),
+        produtoItem(
+          'Linguiça Toscana',
+          'Clássica linguiça toscana, ideal para churrasco. Peso: 500g',
+          'imagens/linguica_toscana.jpg',
+          30.00,
+        ),
+        produtoItem(
+          'Linguiça de Costela',
+          'Feita com costela suína, sabor intenso e aroma defumado. Peso: 500g',
+          'imagens/linguica_de_costela.jpg',
+          37.00,
         ),
       ],
     );
@@ -386,6 +466,30 @@ class _ProdutosPageState extends State<ProdutosPage>
           'imagens/vinho_colonial.png',
           30.00,
         ),
+        produtoItem(
+          'Vinho Branco Suave',
+          'Vinho leve e frutado, perfeito para peixes e saladas. Volume: 750 ml.',
+          'imagens/vinho_branco.jpg',
+          60.00,
+        ),
+        produtoItem(
+          'Vinho Rosé',
+          'Vinho jovem e refrescante, ótimo para dias quentes. Volume: 750ml',
+          'imagens/vinho_rose.jpg',
+          55.00,
+        ),
+        produtoItem(
+          'Espumante Brut',
+          'Espumante seco, ideal para comemorações e harmonização com frutos do mar. Volume: 750ml',
+          'imagens/espumante_brut.jpg',
+          75.00,
+        ),
+        produtoItem(
+          'Vinho Tinto Reserva',
+          'Envelhecido em barris de carvalho, sabor complexo e marcante. Volume: 750ml',
+          'imagens/vinho_tinto_reserva.jpg',
+          95.00,
+        ),
       ],
     );
   }
@@ -394,10 +498,34 @@ class _ProdutosPageState extends State<ProdutosPage>
     return ListView(
       children: [
         produtoItem(
-          'Embutido e defumado',
-          'Obrigado sr defumado',
-          'imagens/vinho_colonial.png',
+          'Presunto Defumado',
+          'Presunto artesanal defumado, sabor marcante. Peso: 500g',
+          'imagens/presuntodefumado.jpg',
+          35.00,
+        ),
+        produtoItem(
+          'Bacon Defumado',
+          'Bacon defumado artesanal, perfeito para receitas. Peso: 300g',
+          'imagens/bacondefumado.jpg',
+          28.00,
+        ),
+        produtoItem(
+          'Salame Italiano',
+          'Salame artesanal, com sabor intenso. Peso: 250g',
+          'imagens/salameitaliano.jpg',
           30.00,
+        ),
+        produtoItem(
+          'Costelinha Defumada',
+          'Costelinha de porco defumada, ideal para feijoadas e cozidos. Peso: 500g',
+          'imagens/costelinhadefumada.jpg',
+          50.00,
+        ),
+        produtoItem(
+          'Pastrami',
+          'Carne curada e defumada, sabor intenso e maciez inigualável. Peso: 500g',
+          'imagens/pastrami.jpg',
+          50.00,
         ),
       ],
     );
@@ -407,10 +535,34 @@ class _ProdutosPageState extends State<ProdutosPage>
     return ListView(
       children: [
         produtoItem(
+          'Manteiga com Sal',
+          'Manteiga artesanal com sal. Peso: 200g',
+          'imagens/manteigacomsal.jpg',
+          15.00,
+        ),
+        produtoItem(
+          'Manteiga sem Sal',
+          'Manteiga artesanal sem sal. Peso: 200g',
+          'imagens/manteigasemsal.jpg',
+          15.00,
+        ),
+        produtoItem(
+          'Creme de Ricota',
+          'Creme de ricota leve e cremoso. Peso: 250g',
+          'imagens/cremedericota.jpg',
+          12.00,
+        ),
+        produtoItem(
           'Manteiga Colonial',
-          'Manteiga',
-          'imagens/vinho_colonial.png',
-          30.00,
+          'Manteiga artesanal com sabor intenso e textura cremosa. Peso: 200g',
+          'imagens/manteigacolonial.jpg',
+          15.00,
+        ),
+        produtoItem(
+          'Creme de Queijo',
+          'Creme de queijo artesanal, perfeito para acompanhar pães e biscoitos. Peso: 150g',
+          'imagens/requeijao.jpg',
+          18.00,
         ),
       ],
     );
@@ -420,10 +572,28 @@ class _ProdutosPageState extends State<ProdutosPage>
     return ListView(
       children: [
         produtoItem(
-          'Cachaça',
-          'Cachaça',
-          'imagens/vinho_colonial.png',
-          30.00,
+          'Cachaça Prata',
+          'Cachaça artesanal, sabor suave e ideal para drinks. Volume: 500 ml',
+          'imagens/cachacaprata.jpg',
+          20.00,
+        ),
+        produtoItem(
+          'Cachaça Envelhecida',
+          'Cachaça envelhecida em barril de carvalho, sabor complexo. Volume: 500 ml',
+          'imagens/cachacaenvelhecida.jpg',
+          35.00,
+        ),
+        produtoItem(
+          'Cachaça com Mel',
+          'Cachaça artesanal com toque de mel, sabor levemente adocicado. Volume: 500 ml',
+          'imagens/cachacamel.jpg',
+          40.00,
+        ),
+        produtoItem(
+          'Cachaça de Umburana',
+          'Envelhecida em barris de umburana, com notas amadeiradas. Volume: 500 ml',
+          'imagens/cachacaumburana.jpg',
+          50.00,
         ),
       ],
     );
@@ -433,10 +603,34 @@ class _ProdutosPageState extends State<ProdutosPage>
     return ListView(
       children: [
         produtoItem(
-          'Conserva',
-          'Conserva',
-          'imagens/vinho_colonial.png',
-          30.00,
+          'Picles de Pepino',
+          'Picles crocante e saboroso. Peso: 300g',
+          'imagens/piclespepino.jpg',
+          10.00,
+        ),
+        produtoItem(
+          'Conserva de Azeitonas',
+          'Azeitonas em conserva, ideal para petiscos. Peso: 200g',
+          'imagens/conservaazeitona.jpg',
+          12.00,
+        ),
+        produtoItem(
+          'Pepperoni em Conserva',
+          'Pepperoni em conserva, excelente para pizzas e petiscos. Peso: 150g',
+          'imagens/conservapepperoni.jpg',
+          14.00,
+        ),
+        produtoItem(
+          'Conserva de Pimenta',
+          'Pimentas selecionadas e curtidas, ideal para pratos apimentados. Peso: 250g',
+          'imagens/conservapimenta.jpg',
+          15.00,
+        ),
+        produtoItem(
+          'Conserva de Alho',
+          'Dentes de alho curtidos em azeite, ótimo acompanhamento. Peso: 200g',
+          'imagens/conservaalho.jpg',
+          12.00,
         ),
       ],
     );

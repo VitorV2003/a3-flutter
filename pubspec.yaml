@@ -21,9 +21,44 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
+    - imagens/logo_site.png
     - imagens/queijo_colonial.png
     - imagens/linguica_colonial.png
     - imagens/vinho_colonial.png
-    - imagens/logo_site.png
+    - imagens/alcatra.jpg
+    - imagens/carne_moida.jpg
+    - imagens/file_mignon.jpg
+    - imagens/costela_bovina.jpg
+    - imagens/picanha_premium.jpg
+    - imagens/vinho_tinto_reserva.jpg
+    - imagens/vinho_rose.jpg
+    - imagens/vinho_branco.jpg
+    - imagens/espumante_brut.jpg
+    - imagens/linguica_toscana.jpg
+    - imagens/linguica_apimentada.jpg
+    - imagens/linguica_pernil.jpg
+    - imagens/linguica_de_costela.jpg
+    - imagens/minas.jpg
+    - imagens/queijoparmesao.jpg
+    - imagens/queijogorgongon.jpg
+    - imagens/coalho.jpg
+    - imagens/costelinhadefumada.jpg
+    - imagens/salameitaliano.jpg
+    - imagens/bacondefumado.jpg
+    - imagens/presuntodefumado.jpg
+    - imagens/pastrami.jpg
+    - imagens/cachacaprata.jpg
+    - imagens/cachacamel.jpg
+    - imagens/cachacaenvelhecida.jpg
+    - imagens/cachacaumburana.jpg
+    - imagens/conservaalho.jpg
+    - imagens/conservaazeitona.jpg
+    - imagens/conservapimenta.jpg
+    - imagens/conservapepperoni.jpg
+    - imagens/cremedericota.jpg
+    - imagens/piclespepino.jpg
+    - imagens/manteigacomsal.jpg
+    - imagens/manteigasemsal.jpg
+    - imagens/requeijao.jpg
+    - imagens/manteigacolonial.jpg
