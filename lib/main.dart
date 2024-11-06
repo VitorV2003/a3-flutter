@@ -183,7 +183,7 @@ class _ProdutosPageState extends State<ProdutosPage>
           title: const Text('Pedido Realizado com Sucesso'),
           content: const Text(
             'Seu pedido foi realizado com sucesso!\n'
-            'Os dados da entrega chegarão no seu zap.',
+            '\nOs dados da entrega chegarão no seu zap.',
           ),
           actions: [
             TextButton(
