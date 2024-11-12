@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'api_service.dart';
 
 void main() {
   runApp(const ProdutosColoniaisApp());
@@ -66,6 +67,7 @@ class _ProdutosPageState extends State<ProdutosPage>
   final TextEditingController _ruaController = TextEditingController();
   final TextEditingController _bairroController = TextEditingController();
   final TextEditingController _numeroController = TextEditingController();
+  final TextEditingController _cepController = TextEditingController();
 
   late TabController _tabController;
 
@@ -123,53 +125,70 @@ class _ProdutosPageState extends State<ProdutosPage>
           title: const Text('Meu pedido'),
           content: SizedBox(
             width: double.maxFinite,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                ..._quantidade.keys.map((String key) {
-                  return ListTile(
-                    leading: Image.asset(_imagens[key]!),
-                    title: Text(key),
-                    subtitle: Text('Quantidade: ${_quantidade[key]}'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () {
-                        _removerProduto(key);
-                        Navigator.of(context).pop();
-                        _mostrarPedido(); // Reabre o diálogo
-                      },
+            child: _quantidade.isEmpty
+                ? const Center(
+                    child: Text(
+                      'O carrinho está vazio. Adicione um produto para finalizar o pedido.',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
                     ),
-                  );
-                }).toList(),
-                const SizedBox(height: 16),
-                _metodoPagamentoWidget(),
-                const SizedBox(height: 16),
-                _enderecoEntregaWidget(),
-              ],
-            ),
+                  )
+                : ListView(
+                    shrinkWrap: true,
+                    children: [
+                      ..._quantidade.keys.map((String key) {
+                        return ListTile(
+                          leading: Image.asset(_imagens[key]!),
+                          title: Text(key),
+                          subtitle: Text('Quantidade: ${_quantidade[key]}'),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () {
+                              _removerProduto(key);
+                              Navigator.of(context).pop();
+                              _mostrarPedido();
+                            },
+                          ),
+                        );
+                      }).toList(),
+                      const SizedBox(height: 16),
+                      _metodoPagamentoWidget(),
+                      const SizedBox(height: 16),
+                      _enderecoEntregaWidget(),
+                    ],
+                  ),
           ),
-          actions: [
-            Text(
-              'Total: R\$ ${_total.toStringAsFixed(2)}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextButton(
-              child: const Text('Fechar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              onPressed: _finalizarPedido,
-              child: const Text(
-                'Finalizar Pedido',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white, // Cor do texto para branco
-                ),
-              ),
-            ),
-          ],
+          actions: _quantidade.isEmpty
+              ? [
+                  TextButton(
+                    child: const Text('Fechar'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ]
+              : [
+                  Text(
+                    'Total: R\$ ${_total.toStringAsFixed(2)}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextButton(
+                    child: const Text('Fechar'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  ElevatedButton(
+                    onPressed: _finalizarPedido,
+                    child: const Text(
+                      'Finalizar Pedido',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
         );
       },
     );
@@ -180,10 +199,10 @@ class _ProdutosPageState extends State<ProdutosPage>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Pedido Realizado com Sucesso'),
+          title: const Text('Pedido realizado com sucesso!'),
           content: const Text(
-            'Seu pedido foi realizado com sucesso!\n'
-            '\nOs dados da entrega chegarão no seu zap.',
+            'Obrigado por comprar conosco!\n'
+            '\nOs dados da entrega chegarão em seu Whatsapp.',
           ),
           actions: [
             TextButton(
@@ -208,6 +227,34 @@ class _ProdutosPageState extends State<ProdutosPage>
     });
   }
 
+  Future<void> _buscarEndereco() async {
+    final cep = _cepController.text;
+    final endereco = await buscarEnderecoPorCEP(cep);
+    if (endereco != null) {
+      setState(() {
+        _ruaController.text = endereco['rua']!;
+        _bairroController.text = endereco['bairro']!;
+      });
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Erro'),
+          content: const Text(
+              'CEP não encontrado. Por favor, verifique o número e tente novamente.'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   Widget _metodoPagamentoWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,8 +273,8 @@ class _ProdutosPageState extends State<ProdutosPage>
                   setState(() {
                     _selectedPaymentMethod = value!;
                   });
-                  Navigator.of(context).pop(); // Fecha o diálogo atual
-                  _mostrarPedido(); // Abre novamente para atualizar
+                  Navigator.of(context).pop();
+                  _mostrarPedido();
                 },
               ),
             ),
@@ -241,8 +288,8 @@ class _ProdutosPageState extends State<ProdutosPage>
                   setState(() {
                     _selectedPaymentMethod = value!;
                   });
-                  Navigator.of(context).pop(); // Fecha o diálogo atual
-                  _mostrarPedido(); // Abre novamente para atualizar
+                  Navigator.of(context).pop();
+                  _mostrarPedido();
                 },
               ),
             ),
@@ -256,8 +303,8 @@ class _ProdutosPageState extends State<ProdutosPage>
                   setState(() {
                     _selectedPaymentMethod = value!;
                   });
-                  Navigator.of(context).pop(); // Fecha o diálogo atual
-                  _mostrarPedido(); // Abre novamente para atualizar
+                  Navigator.of(context).pop();
+                  _mostrarPedido();
                 },
               ),
             ),
@@ -278,6 +325,21 @@ class _ProdutosPageState extends State<ProdutosPage>
       children: [
         const Text('Endereço de Entrega',
             style: TextStyle(fontWeight: FontWeight.bold)),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _cepController,
+                decoration: const InputDecoration(labelText: 'CEP'),
+                keyboardType: TextInputType.number,
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: _buscarEndereco,
+            ),
+          ],
+        ),
         TextField(
           controller: _ruaController,
           decoration: const InputDecoration(labelText: 'Rua'),
